@@ -117,12 +117,10 @@ class ApnsChannelFactory implements PooledObjectFactory<Channel>, Closeable {
                     if (authenticationTokenProvider != null) {
                         clientHandlerBuilder = new TokenAuthenticationApnsClientHandler.TokenAuthenticationApnsClientHandlerBuilder()
                                 .authenticationTokenProvider(authenticationTokenProvider)
-                                .authority(authority)
-                                .idlePingInterval(clientConfiguration.getIdlePingInterval());
+                                .authority(authority);
                     } else {
                         clientHandlerBuilder = new ApnsClientHandler.ApnsClientHandlerBuilder()
-                                .authority(authority)
-                                .idlePingInterval(clientConfiguration.getIdlePingInterval());
+                                .authority(authority);
                     }
 
                     clientConfiguration.getFrameLogger().ifPresent(clientHandlerBuilder::frameLogger);
@@ -140,7 +138,7 @@ class ApnsChannelFactory implements PooledObjectFactory<Channel>, Closeable {
 
                 pipeline.addLast(sslHandler);
                 pipeline.addLast(new FlushConsolidationHandler(FlushConsolidationHandler.DEFAULT_EXPLICIT_FLUSH_AFTER_FLUSHES, true));
-                pipeline.addLast(new IdleStateHandler(clientConfiguration.getIdlePingInterval().toMillis(), 0, 0, TimeUnit.MILLISECONDS));
+                pipeline.addLast(new IdleStateHandler(clientConfiguration.getCloseAfterIdleDuration().toMillis(), 0, 0, TimeUnit.MILLISECONDS));
                 pipeline.addLast(apnsClientHandler);
             }
         });

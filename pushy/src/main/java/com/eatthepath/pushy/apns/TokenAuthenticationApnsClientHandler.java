@@ -31,7 +31,6 @@ import io.netty.util.collection.IntObjectHashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.time.Duration;
 import java.util.Map;
 import java.util.Objects;
 
@@ -65,14 +64,14 @@ class TokenAuthenticationApnsClientHandler extends ApnsClientHandler {
             Objects.requireNonNull(this.authority(), "Authority must be set before building a TokenAuthenticationApnsClientHandler.");
             Objects.requireNonNull(this.authenticationTokenProvider(), "Authentication token provider must be set before building a TokenAuthenticationApnsClientHandler.");
 
-            final ApnsClientHandler handler = new TokenAuthenticationApnsClientHandler(decoder, encoder, initialSettings, this.authority(), this.idlePingInterval(), this.authenticationTokenProvider());
+            final ApnsClientHandler handler = new TokenAuthenticationApnsClientHandler(decoder, encoder, initialSettings, this.authority(), this.authenticationTokenProvider());
             this.frameListener(handler);
             return handler;
         }
     }
 
-    protected TokenAuthenticationApnsClientHandler(final Http2ConnectionDecoder decoder, final Http2ConnectionEncoder encoder, final Http2Settings initialSettings, final String authority, final Duration idlePingInterval, final AuthenticationTokenProvider authenticationTokenProvider) {
-        super(decoder, encoder, initialSettings, authority, idlePingInterval);
+    protected TokenAuthenticationApnsClientHandler(final Http2ConnectionDecoder decoder, final Http2ConnectionEncoder encoder, final Http2Settings initialSettings, final String authority, final AuthenticationTokenProvider authenticationTokenProvider) {
+        super(decoder, encoder, initialSettings, authority);
 
         this.authenticationTokenProvider = Objects.requireNonNull(authenticationTokenProvider, "Authentication token provider must not be null for token-based client handlers.");
         this.authenticationTokenPropertyKey = this.connection().newKey();
